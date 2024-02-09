@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "295810340454",
+    "firebase_url": "https://medicus-5ca5f-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "medicus-5ca5f",
+    "storage_bucket": "medicus-5ca5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295810340454:android:3c0385b17613c0cb00bfa7",
+        "android_client_info": {
+          "package_name": "com.example.medicus_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "295810340454-bk7c05pm3s0thhdllsgaasnviuab0mbg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXp_7Pf4sN9TBFRq7bzeF-yk7yVIY1d1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "295810340454-bk7c05pm3s0thhdllsgaasnviuab0mbg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "295810340454-5amf4gd0hga4m60jbrudbcjeehoerdt5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.medicusFlutter.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
