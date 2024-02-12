@@ -55,7 +55,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '295810340454',
     projectId: 'medicus-5ca5f',
     authDomain: 'medicus-5ca5f.firebaseapp.com',
-    databaseURL: 'https://medicus-5ca5f-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://medicus-5ca5f-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'medicus-5ca5f.appspot.com',
     measurementId: 'G-KSW859LK0H',
   );
@@ -65,7 +66,8 @@ class DefaultFirebaseOptions {
     appId: '1:295810340454:android:3c0385b17613c0cb00bfa7',
     messagingSenderId: '295810340454',
     projectId: 'medicus-5ca5f',
-    databaseURL: 'https://medicus-5ca5f-default-rtdb.asia-southeast1.firebasedatabase.app',
+    databaseURL:
+        'https://medicus-5ca5f-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'medicus-5ca5f.appspot.com',
   );
 }

@@ -27,9 +27,7 @@ class HomeView extends StackedView<HomeViewModel> {
               ),
           ],
         ),
-        body: Container(
-          child: DeviceControlView(),
-        ));
+        body: const DeviceControlView());
   }
 
   @override

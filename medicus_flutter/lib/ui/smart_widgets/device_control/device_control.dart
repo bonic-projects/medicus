@@ -13,182 +13,185 @@ class DeviceControlView extends StackedView<DeviceControlViewModel> {
     DeviceControlViewModel viewModel,
     Widget? child,
   ) {
-    if (viewModel.node != null &&
-        viewModel.node2 != null &&
-        viewModel.deviceData != null &&
-        viewModel.user != null) {
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Balance: ₹${viewModel.currentUser!.balance}",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 20),
-                  ),
-                ),
-              ),
-            ),
-            // if (!viewModel.isDispensing)
-            Card(
-              child: Column(
-                children: [
-                  CustomButton(
-                      onTap: () {
-                        viewModel.dispense(1);
-                      },
-                      text:
-                          "Dispense medicine 1 | Available: ${viewModel.deviceData!.m1}",
-                      isLoading: viewModel.isDispensing),
-                  CustomButton(
-                      onTap: () {
-                        viewModel.dispense(2);
-                      },
-                      text:
-                          "Dispense medicine 2 | Available: ${viewModel.deviceData!.m2}",
-                      isLoading: viewModel.isDispensing),
-                ],
-              ),
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.all(8.0),
-            //   child: CustomButton(
-            //       onTap: viewModel.setStatusView,
-            //       text: viewModel.isStatus ? "Hide status" : "Show status",
-            //       isLoading: false),
-            // ),
-            // if (viewModel.isStatus || viewModel.isDispensing)
-            Card(
+    // if (viewModel.node != null &&
+    //     viewModel.node2 != null &&
+    //     viewModel.deviceData != null &&
+    //     viewModel.user != null) {
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Status: ${viewModel.status}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 24),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                          child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Pin entered: ${viewModel.node2!.pin}"),
-                      )),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("RFID scanned: ${viewModel.node!.rfid}"),
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  "Balance: ₹${viewModel.currentUser!.balance}",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 20),
                 ),
               ),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.8),
-            Card(
-              // color: Colors.white10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
+          ),
+          // if (!viewModel.isDispensing)
+          Card(
+            child: Column(
+              children: [
+                CustomButton(
+                    onTap: () {
+                      viewModel.dispense(1);
+                    },
+                    text:
+                        "Dispense medicine 1 | Available: ${viewModel.deviceData!.m1}",
+                    isLoading: viewModel.isDispensing),
+                CustomButton(
+                    onTap: () {
+                      viewModel.dispense(2);
+                    },
+                    text:
+                        "Dispense medicine 2 | Available: ${viewModel.deviceData!.m2}",
+                    isLoading: viewModel.isDispensing),
+              ],
+            ),
+          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: CustomButton(
+          //       onTap: viewModel.setStatusView,
+          //       text: viewModel.isStatus ? "Hide status" : "Show status",
+          //       isLoading: false),
+          // ),
+          // if (viewModel.isStatus || viewModel.isDispensing)
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  // const Padding(
-                  //   padding: EdgeInsets.only(top: 16.0),
-                  //   child: Text(
-                  //     "Manual Controller",
-                  //     textAlign: TextAlign.left,
-                  //     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
-                  //   ),
-                  // ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomButton(
-                            onTap: viewModel.setStepper1,
-                            text:
-                                "${!viewModel.deviceData!.stepper1 ? "Rotate" : "Stop"} Medicine 1",
-                            isLoading: false),
-                        CustomButton(
-                            onTap: viewModel.setStepper2,
-                            text:
-                                "${!viewModel.deviceData!.stepper2 ? "Rotate" : "Stop"} Medicine 2",
-                            isLoading: false),
-                      ],
+                    child: Text(
+                      "Status: ${viewModel.status}",
+                      style:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomButton(
-                            onTap: viewModel.setGreenLed,
-                            text:
-                                "${!viewModel.deviceData!.greenLed ? "On" : "Off"} Green LED",
-                            isLoading: false),
-                        CustomButton(
-                            onTap: viewModel.setRedLed,
-                            text:
-                                "${!viewModel.deviceData!.redLed ? "On" : "Off"} Red LED",
-                            isLoading: false),
-                      ],
-                    ),
+                    child: Card(
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Pin entered: ${viewModel.node2!.pin}"),
+                    )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CustomButton(
-                            onTap: viewModel.setBuzzer,
-                            text:
-                                "${!viewModel.deviceData!.buzzer ? "On" : "Off"} Buzzer",
-                            isLoading: false),
-                        CustomButton(
-                            onTap: () {},
-                            text: viewModel.node!.rfid,
-                            isLoading: false),
-                      ],
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("RFID scanned: ${viewModel.node!.rfid}"),
+                      ),
                     ),
                   ),
-                  // Slider(
-                  //   value: viewModel.deviceData.redLed.toDouble(),
-                  //   min: 0,
-                  //   max: 180,
-                  //   divisions: 8,
-                  //   label: viewModel.deviceData.redLed.round().toString(),
-                  //   onChanged: viewModel.setServo3,
-                  //   onChangeEnd: (value) {
-                  //     viewModel.setDeviceData();
-                  //   },
-                  // ),
                 ],
               ),
             ),
-          ],
-        ),
-      );
-    } else {
-      return const Center(child: CircularProgressIndicator());
-    }
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.8),
+          Card(
+            // color: Colors.white10,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // const Padding(
+                //   padding: EdgeInsets.only(top: 16.0),
+                //   child: Text(
+                //     "Manual Controller",
+                //     textAlign: TextAlign.left,
+                //     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomButton(
+                          onTap: viewModel.setStepper1,
+                          text:
+                              "${!viewModel.deviceData!.stepper1 ? "Rotate" : "Stop"} Medicine 1",
+                          isLoading: false),
+                      CustomButton(
+                          onTap: viewModel.setStepper2,
+                          text:
+                              "${!viewModel.deviceData!.stepper2 ? "Rotate" : "Stop"} Medicine 2",
+                          isLoading: false),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomButton(
+                          onTap: viewModel.setGreenLed,
+                          text:
+                              "${!viewModel.deviceData!.greenLed ? "On" : "Off"} Green LED",
+                          isLoading: false),
+                      CustomButton(
+                          onTap: viewModel.setRedLed,
+                          text:
+                              "${!viewModel.deviceData!.redLed ? "On" : "Off"} Red LED",
+                          isLoading: false),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CustomButton(
+                          onTap: viewModel.setBuzzer,
+                          text:
+                              "${!viewModel.deviceData!.buzzer ? "On" : "Off"} Buzzer",
+                          isLoading: false),
+                      CustomButton(
+                          onTap: () {},
+                          text: viewModel.node!.rfid,
+                          isLoading: false),
+                    ],
+                  ),
+                ),
+                // Slider(
+                //   value: viewModel.deviceData.redLed.toDouble(),
+                //   min: 0,
+                //   max: 180,
+                //   divisions: 8,
+                //   label: viewModel.deviceData.redLed.round().toString(),
+                //   onChanged: viewModel.setServo3,
+                //   onChangeEnd: (value) {
+                //     viewModel.setDeviceData();
+                //   },
+                // ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
+
+  // else {
+  //   return const Center(child: CircularProgressIndicator());
+  // }
+  // }
 
   @override
   DeviceControlViewModel viewModelBuilder(

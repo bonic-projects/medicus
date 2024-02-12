@@ -30,9 +30,10 @@ class LoginRegisterView extends StackedView<LoginRegisterViewModel> {
             LoginRegisterWidget(
               onLogin: viewModel.openLoginView,
               onRegister: viewModel.openRegisterView,
-              loginText: "Existing Doctor",
-              registerText: "Doctor registration",
+              loginText: "Patient Manuel Signing",
+              registerText: "New Patient Register",
             ),
+            ElevatedButton(onPressed: viewModel.openDoctorView, child: const Text("Doctor's option"))
           ],
         ),
       ),

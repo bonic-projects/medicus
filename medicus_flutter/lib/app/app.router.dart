@@ -5,8 +5,9 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i9;
+import 'package:flutter/material.dart' as _i10;
 import 'package:flutter/material.dart';
+import 'package:medicus_flutter/ui/views/doctor/doctor_view.dart' as _i9;
 import 'package:medicus_flutter/ui/views/home/home_view.dart' as _i3;
 import 'package:medicus_flutter/ui/views/login/login_view.dart' as _i4;
 import 'package:medicus_flutter/ui/views/login_register/login_register_view.dart'
@@ -16,7 +17,7 @@ import 'package:medicus_flutter/ui/views/register/register_view.dart' as _i7;
 import 'package:medicus_flutter/ui/views/settings/settings_view.dart' as _i5;
 import 'package:medicus_flutter/ui/views/startup/startup_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i10;
+import 'package:stacked_services/stacked_services.dart' as _i11;
 
 class Routes {
   static const startupView = '/startup-view';
@@ -33,6 +34,8 @@ class Routes {
 
   static const loginRegisterView = '/login-register-view';
 
+  static const doctorView = '/doctor-view';
+
   static const all = <String>{
     startupView,
     homeView,
@@ -41,6 +44,7 @@ class Routes {
     profileView,
     registerView,
     loginRegisterView,
+    doctorView,
   };
 }
 
@@ -74,17 +78,21 @@ class StackedRouter extends _i1.RouterBase {
       Routes.loginRegisterView,
       page: _i8.LoginRegisterView,
     ),
+    _i1.RouteDef(
+      Routes.doctorView,
+      page: _i9.DoctorView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.StartupView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i10.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.StartupView(),
         settings: data,
       );
     },
     _i3.HomeView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i10.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.HomeView(),
         settings: data,
       );
@@ -93,19 +101,19 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<LoginViewArguments>(
         orElse: () => const LoginViewArguments(),
       );
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i10.MaterialPageRoute<dynamic>(
         builder: (context) => _i4.LoginView(key: args.key),
         settings: data,
       );
     },
     _i5.SettingsView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i10.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.SettingsView(),
         settings: data,
       );
     },
     _i6.ProfileView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i10.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.ProfileView(),
         settings: data,
       );
@@ -114,14 +122,20 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<RegisterViewArguments>(
         orElse: () => const RegisterViewArguments(),
       );
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i10.MaterialPageRoute<dynamic>(
         builder: (context) => _i7.RegisterView(key: args.key),
         settings: data,
       );
     },
     _i8.LoginRegisterView: (data) {
-      return _i9.MaterialPageRoute<dynamic>(
+      return _i10.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.LoginRegisterView(),
+        settings: data,
+      );
+    },
+    _i9.DoctorView: (data) {
+      return _i10.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i9.DoctorView(),
         settings: data,
       );
     },
@@ -137,7 +151,7 @@ class StackedRouter extends _i1.RouterBase {
 class LoginViewArguments {
   const LoginViewArguments({this.key});
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 
   @override
   String toString() {
@@ -159,7 +173,7 @@ class LoginViewArguments {
 class RegisterViewArguments {
   const RegisterViewArguments({this.key});
 
-  final _i9.Key? key;
+  final _i10.Key? key;
 
   @override
   String toString() {
@@ -178,7 +192,7 @@ class RegisterViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i10.NavigationService {
+extension NavigatorStateExtension on _i11.NavigationService {
   Future<dynamic> navigateToStartupView([
     int? routerId,
     bool preventDuplicates = true,
@@ -208,7 +222,7 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> navigateToLoginView({
-    _i9.Key? key,
+    _i10.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -252,7 +266,7 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> navigateToRegisterView({
-    _i9.Key? key,
+    _i10.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -275,6 +289,20 @@ extension NavigatorStateExtension on _i10.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.loginRegisterView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToDoctorView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.doctorView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -310,7 +338,7 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> replaceWithLoginView({
-    _i9.Key? key,
+    _i10.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -354,7 +382,7 @@ extension NavigatorStateExtension on _i10.NavigationService {
   }
 
   Future<dynamic> replaceWithRegisterView({
-    _i9.Key? key,
+    _i10.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -377,6 +405,20 @@ extension NavigatorStateExtension on _i10.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.loginRegisterView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithDoctorView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.doctorView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

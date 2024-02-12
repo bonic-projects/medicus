@@ -7,6 +7,7 @@ import 'dart:async' as _i5;
 import 'dart:ui' as _i6;
 
 import 'package:flutter/material.dart' as _i4;
+import 'package:medicus_flutter/services/videosdk_service.dart' as _i7;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
 import 'package:stacked_services/stacked_services.dart' as _i2;
@@ -669,4 +670,64 @@ class MockDialogService extends _i1.Mock implements _i2.DialogService {
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [VideosdkService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockVideosdkService extends _i1.Mock implements _i7.VideosdkService {
+  @override
+  String get token => (super.noSuchMethod(
+        Invocation.getter(#token),
+        returnValue: _i3.dummyValue<String>(
+          this,
+          Invocation.getter(#token),
+        ),
+        returnValueForMissingStub: _i3.dummyValue<String>(
+          this,
+          Invocation.getter(#token),
+        ),
+      ) as String);
+
+  @override
+  set token(String? _token) => super.noSuchMethod(
+        Invocation.setter(
+          #token,
+          _token,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i5.Future<String> createMeeting() => (super.noSuchMethod(
+        Invocation.method(
+          #createMeeting,
+          [],
+        ),
+        returnValue: _i5.Future<String>.value(_i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #createMeeting,
+            [],
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<String>.value(_i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #createMeeting,
+            [],
+          ),
+        )),
+      ) as _i5.Future<String>);
+
+  @override
+  bool validateMeetingId(dynamic meetingId) => (super.noSuchMethod(
+        Invocation.method(
+          #validateMeetingId,
+          [meetingId],
+        ),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
 }
