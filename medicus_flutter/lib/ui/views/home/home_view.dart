@@ -18,16 +18,19 @@ class HomeView extends StackedView<HomeViewModel> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Medicine Dispenser'),
-          actions: [
-            const IsOnlineWidget(),
-            if (viewModel.user != null)
-              IconButton(
-                onPressed: viewModel.logout,
-                icon: const Icon(Icons.logout),
-              ),
+          actions: const [
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: IsOnlineWidget(),
+            ),
+            // if (viewModel.user != null)
+            //   IconButton(
+            //     onPressed: viewModel.logout,
+            //     icon: const Icon(Icons.logout),
+            //   ),
           ],
         ),
-        body: const DeviceControlView());
+        body: const DeviceControlView(isUser: true));
   }
 
   @override

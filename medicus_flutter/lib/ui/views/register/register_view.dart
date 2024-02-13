@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medicus_flutter/ui/smart_widgets/online_status/online_status.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import '../../../constants/validators.dart';
@@ -54,10 +55,17 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
     RegisterViewModel viewModel,
     Widget? child,
   ) {
+    if(viewModel.node!=null) {
+      rfidController.text = viewModel.node?.rfid??"";
+    }
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: const Text('Register'),
+        actions: const [Padding(
+          padding: EdgeInsets.all(8.0),
+          child: IsOnlineWidget(),
+        )],
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -108,6 +116,7 @@ class RegisterView extends StackedView<RegisterViewModel> with $RegisterView {
                           maxWidth: 350,
                         ),
                         child: TextField(
+                          enabled: false,
                           autofocus: true,
                           decoration: InputDecoration(
                             labelText: 'RFID',

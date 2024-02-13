@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:medicus_flutter/app/app.router.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
 import '../../../app/app.logger.dart';
@@ -9,69 +11,73 @@ import '../../../models/device.dart';
 import '../../../services/firestore_service.dart';
 import '../../../services/rtdb_service.dart';
 import '../../../services/user_service.dart';
+import '../../../services/videosdk_service.dart';
 
 class DeviceControlViewModel extends ReactiveViewModel {
   final log = getLogger('DeviceControlWidget');
   final _dbService = locator<RtdbService>();
   final _userService = locator<UserService>();
   final _firestoreService = locator<FirestoreService>();
+  final _navigationService = locator<NavigationService>();
 
   AppUser? get user => _userService.user;
 
   @override
   List<ListenableServiceMixin> get listenableServices => [_dbService];
 
-  void setStepper1({bool? isOpen}) {
-    if (isOpen != null) {
-      if (isOpen) {
-        _deviceData!.stepper1 = true;
-      } else {
-        _deviceData!.stepper1 = false;
-      }
-    } else {
-      _deviceData!.stepper1 = !_deviceData!.stepper1;
+  void logout() async {
+    setContent("del");
+    await Future.delayed(const Duration(milliseconds: 100));
+    setContent("");
+    _userService.logout();
+    _navigationService.replaceWithLoginRegisterView();
+  }
+
+  final _videosdkService = locator<VideosdkService>();
+  void openDoctorView() async {
+    setBusy(true);
+    String? m = await _videosdkService.createMeeting();
+    if(m!=null) {
+      log.i(m);
+      setContent(m);
+      await Future.delayed(const Duration(seconds: 1));
+      setBusy(false);
+      _navigationService.navigateToDoctorView( isUser: true);
     }
+  }
+
+  Future setOpen1()async  {
+    _deviceData!.isOpen1 = true;
+    setDeviceData();
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 1000));
+    _deviceData!.isOpen1 = false;
+    setDeviceData();
+    notifyListeners();
+  }
+  Future setOpen2()async  {
+    _deviceData!.isOpen2 = true;
+    setDeviceData();
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 1000));
+    _deviceData!.isOpen2 = false;
+    setDeviceData();
+    notifyListeners();
+  }
+  Future setOpen3()async  {
+    _deviceData!.isOpen3 = true;
+    setDeviceData();
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 1000));
+    _deviceData!.isOpen3 = false;
     setDeviceData();
     notifyListeners();
   }
 
-  void setStepper2({bool? isOpen}) {
-    if (isOpen != null) {
-      if (isOpen) {
-        _deviceData!.stepper2 = true;
-      } else {
-        _deviceData!.stepper2 = false;
-      }
-    } else {
-      _deviceData!.stepper2 = !_deviceData!.stepper2;
-    }
-
+  void setContent(String value) {
+    _deviceData!.content = value;
     setDeviceData();
     notifyListeners();
-  }
-
-  void setRedLed() {
-    _deviceData!.redLed = !_deviceData!.redLed;
-    setDeviceData();
-    notifyListeners();
-  }
-
-  void setGreenLed() {
-    _deviceData!.greenLed = !_deviceData!.greenLed;
-    setDeviceData();
-    notifyListeners();
-  }
-
-  void setBuzzer() {
-    _deviceData!.buzzer = !_deviceData!.buzzer;
-    setDeviceData();
-    notifyListeners();
-  }
-
-  void setReset() {
-    _deviceData!.reset = !_deviceData!.reset;
-    setDeviceData();
-    // notifyListeners();
   }
 
   void changeM1(bool isIncrement) {
@@ -100,15 +106,26 @@ class DeviceControlViewModel extends ReactiveViewModel {
     notifyListeners();
   }
 
+  void changeM3(bool isIncrement) {
+    if (isIncrement) {
+      _deviceData!.m3++;
+    } else {
+      _deviceData!.m3--;
+      currentUser!.balance = currentUser!.balance - 2;
+      _firestoreService.updateUser(user: currentUser!);
+      _userService.fetchUser();
+    }
+    setDeviceData();
+    notifyListeners();
+  }
+
   ///RTDB======================================================
   DeviceReading? get node => _dbService.node;
-  DeviceReading2? get node2 => _dbService.node2;
   void setupDevice() {
-    log.i("Setting up listening from robot");
+    log.i("Setting up listening from device");
     currentUser = user;
     if (node == null) {
       _dbService.setupNodeListening();
-      _dbService.setupNode2Listening();
     }
     //Getting servo angle
     getDeviceData();
@@ -127,14 +144,13 @@ class DeviceControlViewModel extends ReactiveViewModel {
     DeviceData? deviceData = await _dbService.getDeviceData();
     if (deviceData != null) {
       _deviceData = DeviceData(
-        stepper1: deviceData.stepper1,
-        stepper2: deviceData.stepper2,
-        redLed: deviceData.redLed,
-        greenLed: deviceData.greenLed,
-        buzzer: deviceData.buzzer,
-        reset: deviceData.reset,
+        isOpen1: deviceData.isOpen1,
+        isOpen2: deviceData.isOpen2,
+        isOpen3: deviceData.isOpen3,
         m1: deviceData.m1,
         m2: deviceData.m2,
+        m3: deviceData.m3,
+        content: deviceData.content,
       );
     }
     setBusy(false);
@@ -154,76 +170,33 @@ class DeviceControlViewModel extends ReactiveViewModel {
   }
 
   void dispense(int m) async {
-    setReset();
-    if (currentUser!.balance < 2) {
+    currentUser ??= user;
+    log.e("dis");
+    if (currentUser!=null && currentUser!.balance < 2) {
       _status = "You balance is low!";
       notifyListeners();
       return;
     }
+
+
     _isDispensing = true;
     _status = "Dispensing started..";
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 2));
-    _status = "Enter you pin";
-    notifyListeners();
-    await Future.delayed(const Duration(seconds: 8));
-    if (user!.pin == node2!.pin) {
-      _status = "Pin passed";
-      notifyListeners();
-      await Future.delayed(const Duration(seconds: 2));
-      _status = "Scan you RFID";
-      notifyListeners();
-      await Future.delayed(const Duration(seconds: 5));
-      if (user!.rfid == node!.rfid) {
-        _status = "User verified";
-        notifyListeners();
-        await Future.delayed(const Duration(seconds: 1));
-        rightInput("Dispensing medicine");
-        await Future.delayed(const Duration(seconds: 1));
-        if (m == 1) {
-          setStepper1();
-          await Future.delayed(const Duration(seconds: 1));
-          setStepper1();
-          await Future.delayed(const Duration(seconds: 1));
-          changeM1(false);
-        } else {
-          setStepper2();
-          await Future.delayed(const Duration(seconds: 1));
-          setStepper2();
-          await Future.delayed(const Duration(seconds: 1));
-          changeM2(false);
-        }
-        rightInput("Thank you for visiting!");
-        await Future.delayed(const Duration(seconds: 3));
-      } else if (node2!.pin.isNotEmpty) {
-        await wrongInput("Wrong RFID input, retry");
-      } else {
-        await wrongInput("No RFID input, Time out!");
-      }
-    } else if (node2!.pin.isNotEmpty) {
-      await wrongInput("Wrong pin, retry");
-    } else {
-      await wrongInput("No pin input, Time out!");
+
+    if(m == 1) {
+      await setOpen1();
+      changeM1(false);
+    } else   if(m == 2) {
+      await setOpen2();
+      changeM2(false);
+    } else   if(m == 3) {
+      await setOpen3();
+      changeM3(false);
     }
 
     _isDispensing = false;
+    _status = "Medicine dispensed";
     notifyListeners();
-  }
-
-  Future wrongInput(String text) async {
-    _status = text;
-    setRedLed();
-    setBuzzer();
-    await Future.delayed(const Duration(seconds: 1));
-    setRedLed();
-    setBuzzer();
-  }
-
-  Future rightInput(String text) async {
-    _status = text;
-    setGreenLed();
-    // await Future.delayed(const Duration(seconds: 1));
-    // setGreenLed();
   }
 
   AppUser? currentUser;

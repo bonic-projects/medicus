@@ -82,6 +82,12 @@ class _MeetingScreenState extends State<MeetingScreen> {
     return true;
   }
 
+  @override
+  void dispose() {
+    onBack();
+    super.dispose();
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

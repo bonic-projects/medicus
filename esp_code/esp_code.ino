@@ -42,7 +42,7 @@ Servo servo3;
 
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#define sensorPin 2          
+#define sensorPin 34          
 #define oneWireBus 4
 OneWire oneWire(oneWireBus);
 DallasTemperature sensors(&oneWire);

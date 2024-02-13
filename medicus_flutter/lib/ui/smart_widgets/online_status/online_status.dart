@@ -15,7 +15,7 @@ class IsOnlineWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text(
-              'Atm: ',
+              'Device: ',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
               ),
@@ -32,25 +32,6 @@ class IsOnlineWidget extends StatelessWidget {
                 color: Colors.red,
                 size: 16,
               ),
-            const SizedBox(width: 10),
-            const Text(
-              'Pin: ',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            if (model.isOnlineBand)
-              const Icon(
-                Icons.circle,
-                color: Colors.green,
-                size: 16,
-              )
-            else
-              const Icon(
-                Icons.circle,
-                color: Colors.red,
-                size: 16,
-              )
           ],
         );
       },

@@ -1,3 +1,5 @@
+import 'package:at_viz/at_gauges/radial_gauges/simple_radial_gauge.dart';
+import 'package:at_viz/at_gauges/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -5,7 +7,8 @@ import '../../widgets/customButton.dart';
 import 'device_control_viewmodel.dart';
 
 class DeviceControlView extends StackedView<DeviceControlViewModel> {
-  const DeviceControlView({Key? key}) : super(key: key);
+  final bool isUser;
+  const DeviceControlView({Key? key, required this.isUser}) : super(key: key);
 
   @override
   Widget builder(
@@ -22,6 +25,29 @@ class DeviceControlView extends StackedView<DeviceControlViewModel> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+
+          if(isUser)
+          Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: ElevatedButton(onPressed: viewModel.logout, child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text("Logout"),
+            )),
+          ),
+          if(isUser)
+          Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: ElevatedButton(onPressed:
+
+            viewModel.isBusy ? null :  viewModel.openDoctorView,
+
+                child:  Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(viewModel.isBusy  ? "Loading.." : "Start Meeting with doctor"),
+            )),
+          ),
+
+          if(isUser && viewModel.currentUser!=null)
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Card(
@@ -37,6 +63,42 @@ class DeviceControlView extends StackedView<DeviceControlViewModel> {
             ),
           ),
           // if (!viewModel.isDispensing)
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+
+            SimpleRadialGauge(
+              actualValue: (viewModel.node?.heartRate?? 0).toDouble(),
+              maxValue: 100,
+              minValue: 0,
+              title: const Text('Heart Rate'),
+              titlePosition: TitlePosition.top,
+              unit: 'bpm',
+              icon: const Icon(Icons.monitor_heart),
+              pointerColor: Colors.red,
+              decimalPlaces: 0,
+              isAnimate: true,
+              animationDuration: 2000,
+              size: 190,
+            ),
+            SimpleRadialGauge(
+              actualValue: (viewModel.node?.temp?? 0.0),
+              maxValue: 100,
+              minValue: 0,
+              title: const Text('Temperature'),
+              titlePosition: TitlePosition.top,
+              unit: 'ºC',
+              icon: const Icon(Icons.thermostat_outlined),
+              pointerColor: Colors.blue,
+              decimalPlaces: 0,
+              isAnimate: true,
+              animationDuration: 2000,
+              size: 190,
+            ),
+          ],),
+
+          if(viewModel.deviceData!=null)
           Card(
             child: Column(
               children: [
@@ -53,6 +115,13 @@ class DeviceControlView extends StackedView<DeviceControlViewModel> {
                     },
                     text:
                         "Dispense medicine 2 | Available: ${viewModel.deviceData!.m2}",
+                    isLoading: viewModel.isDispensing),
+                CustomButton(
+                    onTap: () {
+                      viewModel.dispense(3);
+                    },
+                    text:
+                        "Dispense medicine 3 | Available: ${viewModel.deviceData!.m3}",
                     isLoading: viewModel.isDispensing),
               ],
             ),
@@ -75,16 +144,8 @@ class DeviceControlView extends StackedView<DeviceControlViewModel> {
                     child: Text(
                       "Status: ${viewModel.status}",
                       style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+                          const TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                        child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("Pin entered: ${viewModel.node2!.pin}"),
-                    )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -116,70 +177,30 @@ class DeviceControlView extends StackedView<DeviceControlViewModel> {
                 //     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
                 //   ),
                 // ),
+                if(viewModel.deviceData!=null)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CustomButton(
-                          onTap: viewModel.setStepper1,
+                          onTap: viewModel.setOpen1,
                           text:
-                              "${!viewModel.deviceData!.stepper1 ? "Rotate" : "Stop"} Medicine 1",
+                              "${!viewModel.deviceData!.isOpen1 ? "Rotate" : "Stop"} Medicine 1",
                           isLoading: false),
                       CustomButton(
-                          onTap: viewModel.setStepper2,
+                          onTap: viewModel.setOpen2,
                           text:
-                              "${!viewModel.deviceData!.stepper2 ? "Rotate" : "Stop"} Medicine 2",
+                              "${!viewModel.deviceData!.isOpen2 ? "Rotate" : "Stop"} Medicine 2",
+                          isLoading: false),
+                      CustomButton(
+                          onTap: viewModel.setOpen3,
+                          text:
+                              "${!viewModel.deviceData!.isOpen3 ? "Rotate" : "Stop"} Medicine 3",
                           isLoading: false),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomButton(
-                          onTap: viewModel.setGreenLed,
-                          text:
-                              "${!viewModel.deviceData!.greenLed ? "On" : "Off"} Green LED",
-                          isLoading: false),
-                      CustomButton(
-                          onTap: viewModel.setRedLed,
-                          text:
-                              "${!viewModel.deviceData!.redLed ? "On" : "Off"} Red LED",
-                          isLoading: false),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CustomButton(
-                          onTap: viewModel.setBuzzer,
-                          text:
-                              "${!viewModel.deviceData!.buzzer ? "On" : "Off"} Buzzer",
-                          isLoading: false),
-                      CustomButton(
-                          onTap: () {},
-                          text: viewModel.node!.rfid,
-                          isLoading: false),
-                    ],
-                  ),
-                ),
-                // Slider(
-                //   value: viewModel.deviceData.redLed.toDouble(),
-                //   min: 0,
-                //   max: 180,
-                //   divisions: 8,
-                //   label: viewModel.deviceData.redLed.round().toString(),
-                //   onChanged: viewModel.setServo3,
-                //   onChangeEnd: (value) {
-                //     viewModel.setDeviceData();
-                //   },
-                // ),
               ],
             ),
           ),

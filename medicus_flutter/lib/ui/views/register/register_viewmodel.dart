@@ -6,17 +6,24 @@ import '../../../app/app.locator.dart';
 import '../../../app/app.logger.dart';
 import '../../../app/app.router.dart';
 import '../../../models/appuser.dart';
+import '../../../models/device.dart';
+import '../../../services/rtdb_service.dart';
 import '../../../services/user_service.dart';
 import 'register_view.form.dart';
 
 class RegisterViewModel extends FormViewModel {
   final log = getLogger('RegisterViewModel');
   final _userService = locator<UserService>();
+  final _dbService = locator<RtdbService>();
 
   final FirebaseAuthenticationService? _firebaseAuthenticationService =
       locator<FirebaseAuthenticationService>();
   final _navigationService = locator<NavigationService>();
   final BottomSheetService _bottomSheetService = locator<BottomSheetService>();
+
+  @override
+  List<ListenableServiceMixin> get listenableServices => [_dbService];
+  DeviceReading? get node => _dbService.node;
 
   // late String _userRole;
   // String get userRole => _userRole;
@@ -34,7 +41,8 @@ class RegisterViewModel extends FormViewModel {
             hasPin &&
             // hasSpecialization &&
             hasPassword &&
-            hasName
+            hasName &&
+            node?.rfid != ""
         // hasAge &&
         // hasGender
         // ||
@@ -63,12 +71,13 @@ class RegisterViewModel extends FormViewModel {
           AppUser(
             id: result.user!.uid,
             fullName: nameValue!,
-            registeredOn: DateTime(2022),
+            registeredOn: DateTime.now(),
             email: result.user!.email!,
             pin: pinValue!,
-            rfid: rfidValue!,
+            rfid: node!.rfid,
             userRole: "user",
             balance: 100,
+            password: passwordValue!,
           ),
         );
         if (error == null) {

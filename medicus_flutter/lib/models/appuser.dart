@@ -7,6 +7,7 @@ class AppUser {
   final String pin;
   // final String gender;
   final String userRole;
+  final String password;
   int balance;
 
   AppUser({
@@ -19,6 +20,7 @@ class AppUser {
     // required this.gender,
     required this.userRole,
     required this.balance,
+    required this.password,
   });
 
   AppUser.fromData(Map<String, dynamic> data)
@@ -32,6 +34,7 @@ class AppUser {
         pin = data['pin'] ?? "",
         // gender = data['gender'],
         userRole = data['userRole'] ?? "user",
+        password = data['password'] ?? "",
         balance = data['balance'] ?? 100;
 
   Map<String, dynamic> toJson(keyword) {
@@ -45,6 +48,7 @@ class AppUser {
       'pin': pin,
       // 'gender': gender,
       'userRole': userRole,
+      'password': password,
       'balance': balance,
     };
   }

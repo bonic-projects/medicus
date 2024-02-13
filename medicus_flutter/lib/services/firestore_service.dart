@@ -137,4 +137,24 @@ class FirestoreService {
   // CollectionReference getAddressCollectionForUser(String userId) {
   //   return usersCollection.doc(userId).collection(AddressesFirestoreKey);
   // }
+
+  Future<AppUser?> getUserFromRfid({required String rfid}) async {
+    log.i('rfid:$rfid');
+
+    if (rfid.isNotEmpty) {
+      final querySnapshot = await usersCollection.where('rfid', isEqualTo: rfid).get();
+      if (querySnapshot.docs.isEmpty) {
+        log.v('No user with RFID $rfid found in the database');
+        return null;
+      }
+
+      final userData = querySnapshot.docs.first.data();
+      log.v('User found. Data: $userData');
+
+      return AppUser.fromData(userData as Map<String, dynamic>);
+    } else {
+      log.e("Error: RFID is empty");
+      return null;
+    }
+  }
 }

@@ -134,8 +134,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i9.DoctorView: (data) {
+      final args = data.getArgs<DoctorViewArguments>(nullOk: false);
       return _i10.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i9.DoctorView(),
+        builder: (context) =>
+            _i9.DoctorView(key: args.key, isUser: args.isUser),
         settings: data,
       );
     },
@@ -189,6 +191,33 @@ class RegisterViewArguments {
   @override
   int get hashCode {
     return key.hashCode;
+  }
+}
+
+class DoctorViewArguments {
+  const DoctorViewArguments({
+    this.key,
+    required this.isUser,
+  });
+
+  final _i10.Key? key;
+
+  final bool isUser;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "isUser": "$isUser"}';
+  }
+
+  @override
+  bool operator ==(covariant DoctorViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.isUser == isUser;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ isUser.hashCode;
   }
 }
 
@@ -295,14 +324,17 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToDoctorView([
+  Future<dynamic> navigateToDoctorView({
+    _i10.Key? key,
+    required bool isUser,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.doctorView,
+        arguments: DoctorViewArguments(key: key, isUser: isUser),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -411,14 +443,17 @@ extension NavigatorStateExtension on _i11.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithDoctorView([
+  Future<dynamic> replaceWithDoctorView({
+    _i10.Key? key,
+    required bool isUser,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.doctorView,
+        arguments: DoctorViewArguments(key: key, isUser: isUser),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

@@ -13,12 +13,10 @@ class OnlineStatusViewModel extends BaseViewModel {
   final _dbService = locator<RtdbService>();
 
   DeviceReading? get node => _dbService.node;
-  DeviceReading2? get node2 => _dbService.node2;
 
   bool _isOnline = false;
   bool get isOnline => _isOnline;
-  bool _isOnlineBand = false;
-  bool get isOnlineBand => _isOnlineBand;
+
 
   bool isOnlineCheck(DateTime? time) {
     // log.i(" Online check");
@@ -38,7 +36,6 @@ class OnlineStatusViewModel extends BaseViewModel {
       oneSec,
       (Timer timer) {
         _isOnline = isOnlineCheck(node?.lastSeen);
-        _isOnlineBand = isOnlineCheck(node2?.lastSeen);
         notifyListeners();
       },
     );

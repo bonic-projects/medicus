@@ -31,14 +31,6 @@ class HomeViewModel extends BaseViewModel {
     }
   }
 
-  void openDoctorView() {
-    // _navigationService.navigateToDoctorView();
-  }
-
-  void openUserView() {
-    // _navigationService.navigateToPatientView();
-  }
-
   void showDialog() {
     _dialogService.showCustomDialog(
       variant: DialogType.infoAlert,
@@ -51,4 +43,6 @@ class HomeViewModel extends BaseViewModel {
     _userService.logout();
     _navigationService.replaceWithLoginRegisterView();
   }
+
+
 }

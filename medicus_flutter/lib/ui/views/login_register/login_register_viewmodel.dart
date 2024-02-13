@@ -15,7 +15,7 @@ class LoginRegisterViewModel extends BaseViewModel {
   }
 
   void openDoctorView() {
-    _navigationService.navigateToDoctorView();
+    _navigationService.navigateToDoctorView(isUser: false);
   }
 
   void openRegisterView() {

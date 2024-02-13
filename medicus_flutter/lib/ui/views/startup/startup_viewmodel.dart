@@ -3,14 +3,17 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 import '../../../app/app.locator.dart';
+import '../../../services/rtdb_service.dart';
 import '../../../services/user_service.dart';
 
 class StartupViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
   final _userService = locator<UserService>();
+  final _dbService = locator<RtdbService>();
 
   // Place anything here that needs to happen before we get into the application
   Future runStartupLogic() async {
+    _dbService.setupNodeListening();
     // This is where you can make decisions on where your app should navigate when
     // you have custom startup logic
 
